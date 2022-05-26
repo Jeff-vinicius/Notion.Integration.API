@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notion.Integration.API", "Notion.Integration.API.csproj", "{E42CD483-C094-48BF-A91E-C092A6D083B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notion.Integration.Domain", "..\Notion.Integration.Domain\Notion.Integration.Domain\Notion.Integration.Domain.csproj", "{A7494F78-09F0-47EA-A87E-87AE60DC58E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notion.Integration.Infrastructure", "..\Notion.Integration.Infrastructure\Notion.Integration.Infrastructure\Notion.Integration.Infrastructure.csproj", "{3785528F-F7A6-4F1B-8927-D4FF21D7BCB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E42CD483-C094-48BF-A91E-C092A6D083B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E42CD483-C094-48BF-A91E-C092A6D083B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E42CD483-C094-48BF-A91E-C092A6D083B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E42CD483-C094-48BF-A91E-C092A6D083B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7494F78-09F0-47EA-A87E-87AE60DC58E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7494F78-09F0-47EA-A87E-87AE60DC58E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7494F78-09F0-47EA-A87E-87AE60DC58E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7494F78-09F0-47EA-A87E-87AE60DC58E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3785528F-F7A6-4F1B-8927-D4FF21D7BCB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3785528F-F7A6-4F1B-8927-D4FF21D7BCB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3785528F-F7A6-4F1B-8927-D4FF21D7BCB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3785528F-F7A6-4F1B-8927-D4FF21D7BCB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B006036-8561-48A4-98E9-812F898FAE3A}
+	EndGlobalSection
+EndGlobal
