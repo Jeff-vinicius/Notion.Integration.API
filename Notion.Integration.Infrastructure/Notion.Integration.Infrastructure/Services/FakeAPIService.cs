@@ -3,7 +3,7 @@ using Notion.Integration.Infrastructure.Integrations.FakeAPI;
 
 namespace Notion.Integration.Infrastructure.Services
 {
-    public class FakeAPIService
+    public class FakeAPIService : IFakeAPIService
     {
         private readonly FakeAPI _fakeAPI;
 

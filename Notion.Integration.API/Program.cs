@@ -1,6 +1,14 @@
+using Notion.Integration.API.Services;
+using Notion.Integration.Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Add Dependency Injection
+builder.Services.AddScoped<IIntegrationService, IntegrationService>();
+builder.Services.AddScoped<IFakeAPIService, FakeAPIService>();
+builder.Services.AddScoped<INotionAPIService, NotionAPIService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

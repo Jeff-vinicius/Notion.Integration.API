@@ -3,7 +3,7 @@ using Notion.Integration.Infrastructure.Integrations.NotionAPI;
 
 namespace Notion.Integration.Infrastructure.Services
 {
-    public class NotionAPIService
+    public class NotionAPIService : INotionAPIService
     {
         private readonly NotionAPI _notionAPI;
 

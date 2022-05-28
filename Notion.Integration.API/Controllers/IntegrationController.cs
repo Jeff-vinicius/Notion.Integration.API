@@ -9,11 +9,11 @@ namespace Notion.Integration.API.Controllers
     [Route("[controller]")]
     public class IntegrationController : ControllerBase
     {
-        private readonly ILogger<IntegrationController> _logger;
+        private readonly IIntegrationService _integrationService;
 
-        public IntegrationController(ILogger<IntegrationController> logger)
+        public IntegrationController(IIntegrationService integrationService)
         {
-            _logger = logger;
+            _integrationService = integrationService;
         }
 
         [HttpPost]
@@ -21,11 +21,9 @@ namespace Notion.Integration.API.Controllers
         {
             try
             {
-                IntegrationService integrationService = new();
-                var response = await integrationService.CreateIntegration(credentials);
+                var response = await _integrationService.CreateIntegration(credentials);
 
-
-                return Ok(response.PageManageId);
+                return Created(string.Empty, response.PageManageId);
             }
             catch (Exception ex)
             {

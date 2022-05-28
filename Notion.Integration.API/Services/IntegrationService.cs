@@ -6,16 +6,13 @@ namespace Notion.Integration.API.Services
 {
     public class IntegrationService : IIntegrationService
     {
-        private readonly FakeAPIService _fakeAPIService;
-        private readonly NotionAPIService _notionAPIService;
+        private readonly IFakeAPIService _fakeAPIService;
+        private readonly INotionAPIService _notionAPIService;
 
-        public IntegrationService()
+        public IntegrationService(IFakeAPIService fakeAPIService, INotionAPIService notionAPIService)
         {
-            if (this._fakeAPIService == null)
-                this._fakeAPIService = new FakeAPIService();
-
-            if (this._notionAPIService == null)
-                this._notionAPIService = new NotionAPIService();
+            _fakeAPIService = fakeAPIService;
+            _notionAPIService = notionAPIService;
         }
 
         public async Task<ManagerNotion> CreateIntegration(Credentials credentials)
