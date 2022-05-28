@@ -22,9 +22,10 @@ namespace Notion.Integration.API.Controllers
             try
             {
                 IntegrationService integrationService = new();
-                await integrationService.CreateIntegration(credentials);
+                var response = await integrationService.CreateIntegration(credentials);
 
-                return Ok();
+
+                return Ok(response.PageManageId);
             }
             catch (Exception ex)
             {

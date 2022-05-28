@@ -9,5 +9,8 @@ namespace Notion.Integration.API.Models
 
         [JsonPropertyName("notion_page_id")]
         public string NotionPageId { get; set; }
+
+        [JsonPropertyName("manager_notion")]
+        public string ManagerNotion { get; set; }
     }
 }

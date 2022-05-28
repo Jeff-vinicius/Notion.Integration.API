@@ -4,7 +4,7 @@ using Notion.Integration.Infrastructure.Services;
 
 namespace Notion.Integration.API.Services
 {
-    public class IntegrationService
+    public class IntegrationService : IIntegrationService
     {
         private readonly FakeAPIService _fakeAPIService;
         private readonly NotionAPIService _notionAPIService;
@@ -18,13 +18,13 @@ namespace Notion.Integration.API.Services
                 this._notionAPIService = new NotionAPIService();
         }
 
-        public async Task CreateIntegration(Credentials credentials)
+        public async Task<ManagerNotion> CreateIntegration(Credentials credentials)
         {
             try
             {
                 List<UserFake> fakeUsers = await _fakeAPIService.GetFakeUsers();
 
-                await CreateNotionIntegration(credentials, fakeUsers);
+                return await CreateNotionIntegration(credentials, fakeUsers);
 
             }
             catch (Exception ex)
@@ -35,9 +35,13 @@ namespace Notion.Integration.API.Services
         }
 
         #region Notion
-        private async Task CreateNotionIntegration(Credentials credentials, List<UserFake> fakeUsers)
+        private async Task<ManagerNotion> CreateNotionIntegration(Credentials credentials, List<UserFake> fakeUsers)
         {
             List<UserNotion> notionUsers = new();
+            ManagerNotion managerNotion = new()
+            { 
+                ManagerName = credentials.ManagerNotion
+            };
 
             foreach (var user in fakeUsers)
             {
@@ -59,7 +63,7 @@ namespace Notion.Integration.API.Services
                 });
             }
 
-            List<UserNotion> resultNotion = await _notionAPIService.CreatePages(notionUsers);
+            return await _notionAPIService.CreatePages(notionUsers, managerNotion);
         }
 
         private static List<TasksNotion> GetTasks(List<ToDoFake> toDos)

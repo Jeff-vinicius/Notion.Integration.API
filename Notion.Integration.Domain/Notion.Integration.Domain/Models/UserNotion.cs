@@ -43,7 +43,6 @@
         public string Authorization { get; set; }
         public string PageParentId { get; set; }
         public string PageUserId { get; set; }
-        public string PageManageId { get; set; }
         public string PageUrl { get; set; }
     }
 }

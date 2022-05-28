@@ -13,7 +13,7 @@ namespace Notion.Integration.Infrastructure.Services
                 this._notionAPI = new NotionAPI();
         }
 
-        public async Task<List<UserNotion>> CreatePages(List<UserNotion> usersNotion)
+        public async Task<ManagerNotion> CreatePages(List<UserNotion> usersNotion, ManagerNotion managerNotion)
         {
             try
             {
@@ -24,13 +24,30 @@ namespace Notion.Integration.Infrastructure.Services
                     users.Add(await _notionAPI.CreateUserPage(user));
                 }
 
-                return users;
+                return await CreateManagerPage(users, managerNotion);
 
             }
             catch (Exception ex)
             {
 
                 throw new Exception($"Error creating pages in Notion: {ex}");
+            }
+        }
+
+        private async Task<ManagerNotion> CreateManagerPage(List<UserNotion> usersNotion, ManagerNotion manager)
+        {
+            try
+            {
+                _ = usersNotion.OrderByDescending(u => u.Statistics.TotalPosts);
+
+
+                return await _notionAPI.CreateManagerPage(usersNotion, manager);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"Error creating manager page in Notion: {ex}");
             }
         }
     }

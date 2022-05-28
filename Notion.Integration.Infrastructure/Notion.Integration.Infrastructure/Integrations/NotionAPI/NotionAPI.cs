@@ -22,7 +22,7 @@ namespace Notion.Integration.Infrastructure.Integrations.NotionAPI
 
             var data = JsonSerializer.Serialize(request);
 
-            SavePayload(data);
+            SavePayload(data, "UserPage");
 
             try
             {
@@ -41,6 +41,47 @@ namespace Notion.Integration.Infrastructure.Integrations.NotionAPI
                 user.PageNotion.PageUrl = responsePage.PageUrl;
 
                 return user;
+            }
+            catch (FlurlHttpTimeoutException)
+            {
+                throw new Exception("Request timed out.");
+            }
+            catch (FlurlHttpException ex)
+            {
+                var message = await ex.GetResponseStringAsync();
+
+                throw new Exception(message, ex);
+            }
+        }
+
+        public async Task<ManagerNotion> CreateManagerPage(List<UserNotion> users, ManagerNotion manager)
+        {
+
+            var request = new PageRequest();
+            request.AddParentPageId(users.FirstOrDefault().PageNotion.PageParentId);
+            AddManagerInfos(manager, request);
+            AddManagerStatistics(users, request);
+
+            var data = JsonSerializer.Serialize(request);
+
+            SavePayload(data, "ManagerPage");
+
+            try
+            {
+                var response = await URL_BASE
+                    .WithTimeout(TimeSpan.FromSeconds(25))
+                    .AppendPathSegment("pages")
+                    .WithHeader("Content-Type", "application/json")
+                    .WithHeader("Authorization", $"Bearer {users.FirstOrDefault().PageNotion.Authorization}")
+                    .WithHeader("Notion-Version", "2022-02-22")
+                    .PostStringAsync(data)
+                    .ReceiveString();
+
+                var responsePage = JsonSerializer.Deserialize<PageResponse>(response);
+
+                manager.PageManageUrl = responsePage.PageUrl;
+
+                return manager;
             }
             catch (FlurlHttpTimeoutException)
             {
@@ -160,9 +201,9 @@ namespace Notion.Integration.Infrastructure.Integrations.NotionAPI
             request.AddChild("table", null, null, null, childTable);
         }
 
-        private static void SavePayload(string jsonResult)
+        private static void SavePayload(string jsonResult, string fileName)
         {
-            string path = @"c:\temp\payloadNotion.txt";
+            string path = @$"c:\temp\{fileName}.txt";
 
             if (!File.Exists(path))
             {
@@ -179,5 +220,59 @@ namespace Notion.Integration.Infrastructure.Integrations.NotionAPI
             }
         }
         #endregion
+
+        private static void AddManagerInfos(ManagerNotion manager, PageRequest request)
+        {
+            request.AddPropertieTitle($"Olá 🤖 {manager.ManagerName}");
+            request.AddChild("heading_1", "📋 Informações Gerais", null, null, null);
+            request.AddChild("paragraph", $"🖱 Clicando no nome do usuário, você pode acessar informações detalhadas!",
+                null, null, null);
+            request.AddChild("paragraph", $"🏆 Os usuários estão ordenados de acordo com o maior número de publicações!",
+                null, null, null);
+        }
+
+        public static void AddManagerStatistics(List<UserNotion> users, PageRequest request)
+        {
+            List<ChildTable> childTable = new();
+            
+            List<Cells> cellsHeader = new()
+            {
+                new Cells("Nome"),
+                new Cells("Publicações"),
+                new Cells("Tarefas Concluídas"),
+                new Cells("Tarefas Pendentes")
+            };
+
+            TableRow header = new(cellsHeader);
+            childTable.Add(new ChildTable()
+            {
+                TableRow = header,
+            });
+
+           
+            List<TableRow> tableRowList = new();
+
+            foreach (var user in users)
+            {
+                List<Cells> cellsContet = new();
+
+                cellsContet.Add(new Cells(user.Name));
+                cellsContet.Add(new Cells(user.Statistics.TotalPosts));
+                cellsContet.Add(new Cells(user.Statistics.TotalTasksCompleted));
+                cellsContet.Add(new Cells(user.Statistics.TotalTasksPending));
+
+                tableRowList.Add(new TableRow(cellsContet));
+            }
+
+            foreach (var tableRow in tableRowList)
+            {
+                childTable.Add(new ChildTable()
+                {
+                    TableRow = tableRow,
+                });
+            }
+
+            request.AddChild("table", null, null, null, childTable);
+        }
     }
 }
