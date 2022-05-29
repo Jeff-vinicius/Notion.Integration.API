@@ -1,35 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Notion.Integration.API.Models;
-using Notion.Integration.API.Services;
+using Notion.Integration.Domain.Commands;
+using Notion.Integration.Domain.Mediator;
 
 namespace Notion.Integration.API.Controllers
 {
 
     [ApiController]
     [Route("[controller]")]
-    public class IntegrationController : ControllerBase
+    public class IntegrationController : MainController
     {
-        private readonly IIntegrationService _integrationService;
+        private readonly IMediatorHandler _mediatorHandler;
 
-        public IntegrationController(IIntegrationService integrationService)
+        public IntegrationController(IMediatorHandler mediatorHandler)
         {
-            _integrationService = integrationService;
+            _mediatorHandler = mediatorHandler;
         }
 
         [HttpPost]
         public async Task<IActionResult> Execute([FromBody] Credentials credentials)
         {
-            try
-            {
-                var response = await _integrationService.CreateIntegration(credentials);
+            var command = new CreateIntegrationCommand(Guid.NewGuid(), credentials.NotionAuthorization, credentials.NotionPageId, credentials.ManagerNotion);
 
-                return Created(string.Empty, response.PageManageId);
-            }
-            catch (Exception ex)
-            {
+            var result = await _mediatorHandler.SendCommand(command);
 
-                return BadRequest($"{ex}");
-            }
+            return CustomResponse(result);
         }
     }
 }

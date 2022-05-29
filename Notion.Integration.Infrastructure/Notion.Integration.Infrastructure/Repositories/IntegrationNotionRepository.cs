@@ -1,27 +1,27 @@
-﻿using Notion.Integration.API.Models;
+﻿using Notion.Integration.Domain.Interfaces;
 using Notion.Integration.Domain.Models;
 using Notion.Integration.Infrastructure.Services;
 
-namespace Notion.Integration.API.Services
+namespace Notion.Integration.Infrastructure.Repositories
 {
-    public class IntegrationService : IIntegrationService
+    public class IntegrationNotionRepository : IIntegrationNotionRepository
     {
         private readonly IFakeAPIService _fakeAPIService;
         private readonly INotionAPIService _notionAPIService;
 
-        public IntegrationService(IFakeAPIService fakeAPIService, INotionAPIService notionAPIService)
+        public IntegrationNotionRepository(IFakeAPIService fakeAPIService, INotionAPIService notionAPIService)
         {
             _fakeAPIService = fakeAPIService;
             _notionAPIService = notionAPIService;
         }
 
-        public async Task<ManagerNotion> CreateIntegration(Credentials credentials)
+        public async Task<ManagerNotion> CreateIntegrationNotion(IntegrationNotion integrationNotion)
         {
             try
             {
                 List<UserFake> fakeUsers = await _fakeAPIService.GetFakeUsers();
 
-                return await CreateNotionIntegration(credentials, fakeUsers);
+                return await CreateNotionIntegration(integrationNotion, fakeUsers);
 
             }
             catch (Exception ex)
@@ -31,13 +31,12 @@ namespace Notion.Integration.API.Services
             }
         }
 
-        #region Notion
-        private async Task<ManagerNotion> CreateNotionIntegration(Credentials credentials, List<UserFake> fakeUsers)
+        private async Task<ManagerNotion> CreateNotionIntegration(IntegrationNotion integrationNotion, List<UserFake> fakeUsers)
         {
             List<UserNotion> notionUsers = new();
             ManagerNotion managerNotion = new()
-            { 
-                ManagerName = credentials.ManagerNotion
+            {
+                ManagerName = integrationNotion.ManagerNotion
             };
 
             foreach (var user in fakeUsers)
@@ -54,8 +53,8 @@ namespace Notion.Integration.API.Services
                     Statistics = GetStatistics(user),
                     PageNotion = new PageNotion()
                     {
-                        Authorization = credentials.NotionAuthorization,
-                        PageParentId = credentials.NotionPageId
+                        Authorization = integrationNotion.NotionAuthorization,
+                        PageParentId = integrationNotion.NotionPageId
                     }
                 });
             }
@@ -135,7 +134,5 @@ namespace Notion.Integration.API.Services
             };
             return statistics;
         }
-        #endregion
     }
 }
-

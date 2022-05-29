@@ -1,19 +1,29 @@
-using Notion.Integration.API.Services;
+using FluentValidation.Results;
+using MediatR;
+using Notion.Integration.Domain.Commands;
+using Notion.Integration.Domain.Interfaces;
+using Notion.Integration.Domain.Mediator;
 using Notion.Integration.Infrastructure.Services;
+using Notion.Integration.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 // Add Dependency Injection
-builder.Services.AddScoped<IIntegrationService, IntegrationService>();
 builder.Services.AddScoped<IFakeAPIService, FakeAPIService>();
 builder.Services.AddScoped<INotionAPIService, NotionAPIService>();
+builder.Services.AddScoped<IIntegrationNotionRepository, IntegrationNotionRepository>();
+
+builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
+builder.Services.AddScoped<IRequestHandler<CreateIntegrationCommand, ValidationResult>, IntegrationCommandHandler>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMediatR(typeof(Program));
 
 var app = builder.Build();
 
