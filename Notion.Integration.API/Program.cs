@@ -1,8 +1,6 @@
-using FluentValidation.Results;
 using MediatR;
 using Notion.Integration.Domain.Commands;
 using Notion.Integration.Domain.Interfaces;
-using Notion.Integration.Domain.Mediator;
 using Notion.Integration.Infrastructure.Services;
 using Notion.Integration.Infrastructure.Repositories;
 
@@ -15,8 +13,7 @@ builder.Services.AddScoped<IFakeAPIService, FakeAPIService>();
 builder.Services.AddScoped<INotionAPIService, NotionAPIService>();
 builder.Services.AddScoped<IIntegrationNotionRepository, IntegrationNotionRepository>();
 
-builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
-builder.Services.AddScoped<IRequestHandler<CreateIntegrationCommand, ValidationResult>, IntegrationCommandHandler>();
+builder.Services.AddScoped<IRequestHandler<CreateIntegrationCommand, IntegrationResponse>, IntegrationCommandHandler>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

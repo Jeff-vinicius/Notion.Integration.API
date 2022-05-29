@@ -1,22 +1,19 @@
 ﻿using FluentValidation.Results;
-using MediatR;
 using Notion.Integration.Domain.Events;
 
 namespace Notion.Integration.Domain.Commands
 {
-    public abstract class Command : Message, IRequest<ValidationResult>
+    public abstract class Command : Message
     {
-        public DateTime Timestamp { get; private set; }
         public ValidationResult ValidationResult { get; set; }
 
-        protected Command()
-        {
-            Timestamp = DateTime.Now;
-        }
+        public abstract bool IsValid { get; }
+    }
 
-        public virtual bool IsValid()
-        {
-            throw new NotImplementedException();
-        }
+    public abstract class Command<TResponse> : Message<TResponse>
+    {
+        public ValidationResult ValidationResult { get; set; }
+
+        public abstract bool IsValid { get; }
     }
 }

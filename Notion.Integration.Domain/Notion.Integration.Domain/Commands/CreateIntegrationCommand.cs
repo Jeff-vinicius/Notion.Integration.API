@@ -3,7 +3,7 @@ using FluentValidation.Results;
 
 namespace Notion.Integration.Domain.Commands
 {
-    public class CreateIntegrationCommand : Command
+    public class CreateIntegrationCommand : Command<IntegrationResponse>
     {
         public Guid Id { get; set; }
         public string NotionAuthorization { get; private set; }
@@ -12,17 +12,21 @@ namespace Notion.Integration.Domain.Commands
 
         public CreateIntegrationCommand(Guid id, string notionAuthorization, string notionPageId, string managerNotion)
         {
-            AggregateId = id;
             Id = id;
             NotionAuthorization = notionAuthorization;
             NotionPageId = notionPageId;
             ManagerNotion = managerNotion;
         }
 
-        public override bool IsValid()
+        public override bool IsValid
         {
-            ValidationResult = new CreateIntegrationValidation().Validate(this);
-            return ValidationResult.IsValid;
+            get
+            {
+                ValidationResult = new CreateIntegrationValidation()
+                    .Validate(this);
+
+                return ValidationResult.IsValid;
+            }
         }
     }
 

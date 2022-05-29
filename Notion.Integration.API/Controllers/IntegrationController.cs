@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Notion.Integration.API.Models;
 using Notion.Integration.Domain.Commands;
-using Notion.Integration.Domain.Mediator;
 
 namespace Notion.Integration.API.Controllers
 {
@@ -10,11 +10,11 @@ namespace Notion.Integration.API.Controllers
     [Route("[controller]")]
     public class IntegrationController : MainController
     {
-        private readonly IMediatorHandler _mediatorHandler;
+        private readonly IMediator _mediator;
 
-        public IntegrationController(IMediatorHandler mediatorHandler)
+        public IntegrationController(IMediator mediator)
         {
-            _mediatorHandler = mediatorHandler;
+            _mediator = mediator;
         }
 
         [HttpPost]
@@ -22,9 +22,9 @@ namespace Notion.Integration.API.Controllers
         {
             var command = new CreateIntegrationCommand(Guid.NewGuid(), credentials.NotionAuthorization, credentials.NotionPageId, credentials.ManagerNotion);
 
-            var result = await _mediatorHandler.SendCommand(command);
+            var result = await _mediator.Send(command);
 
-            return CustomResponse(result);
+            return CustomResponse(result.ManagerPageUrl);
         }
     }
 }

@@ -1,13 +1,12 @@
-﻿namespace Notion.Integration.Domain.Events
-{
-    public abstract class Message
-    {
-        public string MessageType { get; protected set; }
-        public Guid AggregateId { get; protected set; }
+﻿using MediatR;
 
-        protected Message()
-        {
-            MessageType = GetType().Name;
-        }
+namespace Notion.Integration.Domain.Events
+{
+    public abstract class Message : IRequest
+    {
+    }
+
+    public abstract class Message<TResponse> : IRequest<TResponse>
+    {
     }
 }

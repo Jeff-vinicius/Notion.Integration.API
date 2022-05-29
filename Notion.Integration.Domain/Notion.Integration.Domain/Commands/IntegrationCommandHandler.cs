@@ -1,35 +1,43 @@
-﻿using FluentValidation.Results;
-using MediatR;
+﻿using MediatR;
 using Notion.Integration.Domain.Interfaces;
 using Notion.Integration.Domain.Models;
+using Notion.Integration.Domain.Notifications;
 
 namespace Notion.Integration.Domain.Commands
 {
     public class IntegrationCommandHandler : CommandHandler,
-        IRequestHandler<CreateIntegrationCommand, ValidationResult>
+       IRequestHandler<CreateIntegrationCommand, IntegrationResponse>
     {
         private readonly IIntegrationNotionRepository _integrationNotionRepository;
 
-        public IntegrationCommandHandler(IIntegrationNotionRepository integrationNotionRepository)
+        public IntegrationCommandHandler(IMediator mediator, IIntegrationNotionRepository integrationNotionRepository) : base(mediator)
         {
             _integrationNotionRepository = integrationNotionRepository;
         }
 
-        public async Task<ValidationResult> Handle(CreateIntegrationCommand request, CancellationToken cancellationToken)
+        public async Task<IntegrationResponse> Handle(CreateIntegrationCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid()) return request.ValidationResult;
+            if (!request.IsValid)
+            {
+                NotifyValidationErrors(request);
+                return new IntegrationResponse();
+            } 
 
             var integration = new IntegrationNotion(request.Id, request.NotionAuthorization, request.NotionPageId, request.ManagerNotion);
 
-            var pageManager =  await _integrationNotionRepository.CreateIntegrationNotion(integration);
+            var pageManager = await _integrationNotionRepository.CreateIntegrationNotion(integration);
 
-            if(pageManager.PageManageUrl == null)
+            if (pageManager.PageManageUrl == null)
             {
-                AddError("Houve um erro na integração, entre em contato com o administrador!");
-                return ValidationResult;
+                await Mediator.Publish(new Notification("", "Houve um erro na integração, entre em contato com o administrador!"));
+
+                return new IntegrationResponse();
             }
 
-            return ValidationResult;
+            return new IntegrationResponse
+            {
+                ManagerPageUrl = pageManager.PageManageUrl,
+            };
         }
     }
 }

@@ -1,19 +1,25 @@
-﻿using FluentValidation.Results;
+﻿using MediatR;
+using Notion.Integration.Domain.Notifications;
 
 namespace Notion.Integration.Domain.Commands
 {
     public abstract class CommandHandler
     {
-        protected ValidationResult ValidationResult;
+        public IMediator Mediator { get; private set; }
 
-        protected CommandHandler()
+        protected CommandHandler(IMediator mediator)
         {
-            ValidationResult = new ValidationResult();
+            Mediator = mediator;
         }
 
-        protected void AddError(string message)
+        protected void NotifyValidationErrors(Command command)
         {
-            ValidationResult.Errors.Add(new ValidationFailure(string.Empty, message));
+            foreach (var error in command?.ValidationResult?.Errors) Mediator.Publish(new Notification("", error.ErrorMessage));
+        }
+
+        protected void NotifyValidationErrors<TResponse>(Command<TResponse> command)
+        {
+
         }
     }
 }
