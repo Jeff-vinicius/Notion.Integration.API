@@ -3,6 +3,8 @@ using Notion.Integration.Domain.Commands;
 using Notion.Integration.Domain.Interfaces;
 using Notion.Integration.Infrastructure.Services;
 using Notion.Integration.Infrastructure.Repositories;
+using Notion.Integration.Infrastructure.Integrations.NotionAPI;
+using Notion.Integration.Infrastructure.Integrations.FakeAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IFakeAPIService, FakeAPIService>();
 builder.Services.AddScoped<INotionAPIService, NotionAPIService>();
 builder.Services.AddScoped<IIntegrationNotionRepository, IntegrationNotionRepository>();
+builder.Services.AddScoped<INotionAPI, NotionAPI>();
+builder.Services.AddScoped<IFakeAPI, FakeAPI>();
 
 builder.Services.AddScoped<IRequestHandler<CreateIntegrationCommand, IntegrationResponse>, IntegrationCommandHandler>();
 

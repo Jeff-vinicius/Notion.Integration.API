@@ -2,10 +2,11 @@
 using Flurl;
 using Notion.Integration.Infrastructure.Integrations.FakeAPI.Models;
 using Notion.Integration.Domain.Models;
+using Notion.Integration.Domain.Exceptions;
 
 namespace Notion.Integration.Infrastructure.Integrations.FakeAPI
 {
-    public class FakeAPI
+    public class FakeAPI : IFakeAPI
     {
         private const string URL_BASE = "https://jsonplaceholder.typicode.com/";
 
@@ -38,14 +39,14 @@ namespace Notion.Integration.Infrastructure.Integrations.FakeAPI
             }
             catch (FlurlHttpTimeoutException)
             {
-                throw new Exception("Request timed out.");
+                throw new FakeAPIException("Request timed out.");
 
             }
             catch (FlurlHttpException ex)
             {
                 var message = await ex.GetResponseStringAsync();
 
-                throw new Exception(message, ex);
+                throw new FakeAPIException(message, ex);
             }
         }
 
@@ -76,14 +77,14 @@ namespace Notion.Integration.Infrastructure.Integrations.FakeAPI
             }
             catch (FlurlHttpTimeoutException)
             {
-                throw new Exception("Request timed out.");
+                throw new FakeAPIException("Request timed out.");
 
             }
             catch (FlurlHttpException ex)
             {
                 var message = await ex.GetResponseStringAsync();
 
-                throw new Exception(message, ex);
+                throw new FakeAPIException(message, ex);
             }
         }
 
@@ -113,14 +114,14 @@ namespace Notion.Integration.Infrastructure.Integrations.FakeAPI
             }
             catch (FlurlHttpTimeoutException)
             {
-                throw new Exception("Request timed out.");
+                throw new FakeAPIException("Request timed out.");
 
             }
             catch (FlurlHttpException ex)
             {
                 var message = await ex.GetResponseStringAsync();
 
-                throw new Exception(message, ex);
+                throw new FakeAPIException(message, ex);
             }
         }
 
@@ -151,14 +152,14 @@ namespace Notion.Integration.Infrastructure.Integrations.FakeAPI
             }
             catch (FlurlHttpTimeoutException)
             {
-                throw new Exception("Request timed out.");
+                throw new FakeAPIException("Request timed out.");
 
             }
             catch (FlurlHttpException ex)
             {
                 var message = await ex.GetResponseStringAsync();
 
-                throw new Exception(message, ex);
+                throw new FakeAPIException(message, ex);
             }
         }
     }

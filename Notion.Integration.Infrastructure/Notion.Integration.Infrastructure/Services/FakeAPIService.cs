@@ -5,12 +5,11 @@ namespace Notion.Integration.Infrastructure.Services
 {
     public class FakeAPIService : IFakeAPIService
     {
-        private readonly FakeAPI _fakeAPI;
+        private readonly IFakeAPI _fakeAPI;
 
-        public FakeAPIService()
+        public FakeAPIService(IFakeAPI fakeAPI)
         {
-            if (this._fakeAPI == null)
-                this._fakeAPI = new FakeAPI();
+            _fakeAPI = fakeAPI;
         }
 
         public async Task<List<UserFake>> GetFakeUsers()
