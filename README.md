@@ -61,4 +61,4 @@ Título da página recebe o nome de cada usuário
 Desenvolvido por Jefferson Vinicius!
 
 [![Linkedin Badge](https://img.shields.io/badge/-Jefferson-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/jeffvinicius/)](https://www.linkedin.com/in/jeffvinicius/) 
-[![Gmail Badge](https://img.shields.io/badge/-jefferson.vinicius.souza@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:jefferson.vinicius.souza@gmail.com)](jefferson.vinicius.souza@gmail.com)
+[![Gmail Badge](https://img.shields.io/badge/-jefferson.vinicius.souza@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:jefferson.vinicius.souza@gmail.com)](mailto:jefferson.vinicius.souza@gmail.com?subject=Olá%20Jefferson%20Vinicius)
